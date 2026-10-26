@@ -16,12 +16,14 @@ from app.api.routes import (
 )
 from app.core.config import settings
 from app.core.db import Base, engine
+from app.core.schema_fixes import apply_schema_fixes
 
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
+        await apply_schema_fixes(conn, engine.sync_engine.dialect.name)
     yield
     await engine.dispose()
 

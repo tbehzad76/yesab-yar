@@ -19,22 +19,48 @@ const EMPTY = { name: "", phone: "", email: "", note: "" };
 export function Contacts() {
   const { data, loading, error, reload } = useApi<Contact[]>("/contacts");
   const [open, setOpen] = useState(false);
+  const [editing, setEditing] = useState<Contact | null>(null);
   const [form, setForm] = useState({ ...EMPTY });
   const [formError, setFormError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+
+  function openCreate() {
+    setEditing(null);
+    setForm({ ...EMPTY });
+    setFormError(null);
+    setOpen(true);
+  }
+
+  function openEdit(contact: Contact) {
+    setEditing(contact);
+    setForm({
+      name: contact.name,
+      phone: contact.phone ?? "",
+      email: contact.email ?? "",
+      note: contact.note ?? "",
+    });
+    setFormError(null);
+    setOpen(true);
+  }
 
   async function submit(event: FormEvent) {
     event.preventDefault();
     setBusy(true);
     setFormError(null);
+    const payload = {
+      name: form.name.trim(),
+      phone: form.phone.trim() || null,
+      email: form.email.trim() || null,
+      note: form.note.trim() || null,
+    };
     try {
-      await api.post("/contacts", {
-        name: form.name.trim(),
-        phone: form.phone.trim() || null,
-        email: form.email.trim() || null,
-        note: form.note.trim() || null,
-      });
+      if (editing) {
+        await api.patch(`/contacts/${editing.id}`, payload);
+      } else {
+        await api.post("/contacts", payload);
+      }
       setOpen(false);
+      setEditing(null);
       setForm({ ...EMPTY });
       await reload();
     } catch (err) {
@@ -62,7 +88,7 @@ export function Contacts() {
           <p className="sub">اشخاصی که با آن‌ها طلب یا بدهی دارید</p>
         </div>
         <div className="head-actions">
-          <Button onClick={() => setOpen(true)}>+ شخص جدید</Button>
+          <Button onClick={openCreate}>+ شخص جدید</Button>
         </div>
       </header>
 
@@ -95,13 +121,22 @@ export function Contacts() {
                   <td dir="ltr">{contact.email || "—"}</td>
                   <td className="muted">{contact.note || "—"}</td>
                   <td>
-                    <Button
-                      variant="danger"
-                      className="btn-sm"
-                      onClick={() => remove(contact)}
-                    >
-                      حذف
-                    </Button>
+                    <div className="actions">
+                      <Button
+                        variant="ghost"
+                        className="btn-sm"
+                        onClick={() => openEdit(contact)}
+                      >
+                        ویرایش
+                      </Button>
+                      <Button
+                        variant="danger"
+                        className="btn-sm"
+                        onClick={() => remove(contact)}
+                      >
+                        حذف
+                      </Button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -110,7 +145,14 @@ export function Contacts() {
         </div>
       )}
 
-      <Modal open={open} title="شخص جدید" onClose={() => setOpen(false)}>
+      <Modal
+        open={open}
+        title={editing ? "ویرایش شخص" : "شخص جدید"}
+        onClose={() => {
+          setOpen(false);
+          setEditing(null);
+        }}
+      >
         <form onSubmit={submit}>
           {formError && <div className="alert alert-error">{formError}</div>}
           <Field label="نام">
@@ -148,7 +190,14 @@ export function Contacts() {
             <Button type="submit" disabled={busy}>
               {busy ? "در حال ذخیره…" : "ذخیره"}
             </Button>
-            <Button type="button" variant="ghost" onClick={() => setOpen(false)}>
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => {
+                setOpen(false);
+                setEditing(null);
+              }}
+            >
               انصراف
             </Button>
           </div>

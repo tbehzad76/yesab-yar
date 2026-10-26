@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date as date_type
 from decimal import Decimal
 
 from sqlalchemy import Date, Enum, ForeignKey, Index, Numeric, String, Text
@@ -30,8 +30,8 @@ class Debt(Base, TimestampMixin):
     currency: Mapped[str] = mapped_column(
         String(8), default=settings.default_currency, nullable=False
     )
-    date: Mapped[date] = mapped_column(Date, nullable=False)
-    due_date: Mapped[date | None] = mapped_column(Date)
+    date: Mapped[date_type] = mapped_column(Date, nullable=False)
+    due_date: Mapped[date_type | None] = mapped_column(Date)
     status: Mapped[DebtStatus] = mapped_column(
         Enum(DebtStatus, name="debt_status"), default=DebtStatus.open, nullable=False
     )
@@ -52,7 +52,7 @@ class DebtPayment(Base, TimestampMixin):
         ForeignKey("debts.id", ondelete="CASCADE"), index=True, nullable=False
     )
     amount: Mapped[Decimal] = mapped_column(Numeric(18, 2), nullable=False)
-    date: Mapped[date] = mapped_column(Date, nullable=False)
+    date: Mapped[date_type] = mapped_column(Date, nullable=False)
     note: Mapped[str | None] = mapped_column(String(500))
 
     debt: Mapped[Debt] = relationship(back_populates="payments")
