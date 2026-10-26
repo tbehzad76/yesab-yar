@@ -35,9 +35,9 @@ hesabyar/
       └─ types.ts
 ```
 
-- فرانت‌اند روی درگاه **8080** سرو می‌شود و مسیر `/api` را به سرویس `backend` پروکسی می‌کند (بدون مشکل CORS).
-- بک‌اند روی درگاه **8000** (مستندات در `/docs`).
-- PostgreSQL روی درگاه **5432**.
+- فرانت‌اند روی درگاه **3000** سرو می‌شود و مسیر `/api` را به سرویس `backend` پروکسی می‌کند (بدون مشکل CORS).
+- بک‌اند روی درگاه **3001** (مستندات در `/docs`).
+- PostgreSQL روی درگاه **3002** (فقط روی لوکال‌هاست).
 
 ## اجرا
 
@@ -57,8 +57,8 @@ docker compose up -d --build
 
 ۳) استفاده:
 
-- رابط کاربری: http://localhost:8080
-- مستندات API: http://localhost:8000/docs
+- رابط کاربری: http://localhost:3000
+- مستندات API: http://localhost:3001/docs
 
 ساخت جدول‌های دیتابیس هنگام راه‌اندازی بک‌اند به‌صورت خودکار انجام می‌شود.
 
@@ -72,7 +72,7 @@ python -m venv .venv && .venv\Scripts\activate      # ویندوز
 pip install -r requirements.txt
 # اجرای فقط دیتابیس در داکر و بک‌اند به‌صورت محلی:
 docker compose up -d db
-uvicorn app.main:app --reload
+uvicorn app.main:app --reload --port 3001
 ```
 
 فرانت‌اند:
@@ -80,7 +80,7 @@ uvicorn app.main:app --reload
 ```bash
 cd frontend
 npm install
-npm run dev        # روی http://localhost:5173 با پروکسی /api به :8000
+npm run dev        # روی http://localhost:3000 با پروکسی /api به :3001
 ```
 
 ## نکات

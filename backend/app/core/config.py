@@ -24,7 +24,7 @@ class Settings(BaseSettings):
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 1440
 
-    cors_origins: str = "http://localhost:8080,http://localhost:5173"
+    cors_origins: str = "http://localhost:3000,http://127.0.0.1:3000"
 
     @property
     def sqlalchemy_database_uri(self) -> str:
