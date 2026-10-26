@@ -50,12 +50,12 @@ services:
       - "80"
     networks:
       - default
-      - myapp_net
+      - hesabyar_net
 
 volumes:
   pgdata:
 
 networks:
-  myapp_net:
+  hesabyar_net:
     external: true
-    name: myapp_net
+    name: hesabyar_net
