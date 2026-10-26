@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 
 import { api, queryString } from "../api";
+import { DateInput } from "../components/DateInput";
 import {
   Badge,
   Button,
@@ -201,24 +202,22 @@ export function Transactions() {
             </Select>
           </Field>
           <Field label="از تاریخ">
-            <Input
-              type="date"
-              dir="ltr"
+            <DateInput
               value={filters.date_from}
-              onChange={(event) => {
+              placeholder="از تاریخ"
+              onChange={(iso) => {
                 setPage(1);
-                setFilters({ ...filters, date_from: event.target.value });
+                setFilters({ ...filters, date_from: iso });
               }}
             />
           </Field>
           <Field label="تا تاریخ">
-            <Input
-              type="date"
-              dir="ltr"
+            <DateInput
               value={filters.date_to}
-              onChange={(event) => {
+              placeholder="تا تاریخ"
+              onChange={(iso) => {
                 setPage(1);
-                setFilters({ ...filters, date_to: event.target.value });
+                setFilters({ ...filters, date_to: iso });
               }}
             />
           </Field>
@@ -367,12 +366,10 @@ export function Transactions() {
               />
             </Field>
             <Field label="تاریخ">
-              <Input
-                type="date"
-                dir="ltr"
+              <DateInput
                 required
                 value={form.date}
-                onChange={(event) => setForm({ ...form, date: event.target.value })}
+                onChange={(iso) => setForm({ ...form, date: iso })}
               />
             </Field>
           </div>

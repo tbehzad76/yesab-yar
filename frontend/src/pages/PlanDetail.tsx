@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Link, useParams } from "react-router-dom";
 
 import { api } from "../api";
+import { DateInput } from "../components/DateInput";
 import {
   Badge,
   Button,
@@ -273,14 +274,10 @@ export function PlanDetail() {
               />
             </Field>
             <Field label="تاریخ">
-              <Input
-                type="date"
-                dir="ltr"
+              <DateInput
                 required
                 value={payForm.date}
-                onChange={(event) =>
-                  setPayForm({ ...payForm, date: event.target.value })
-                }
+                onChange={(iso) => setPayForm({ ...payForm, date: iso })}
               />
             </Field>
           </div>

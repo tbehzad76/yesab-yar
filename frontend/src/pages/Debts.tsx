@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 
 import { api } from "../api";
+import { DateInput } from "../components/DateInput";
 import {
   Badge,
   Button,
@@ -295,20 +296,17 @@ export function Debts() {
               />
             </Field>
             <Field label="تاریخ">
-              <Input
-                type="date"
-                dir="ltr"
+              <DateInput
                 required
                 value={form.date}
-                onChange={(event) => setForm({ ...form, date: event.target.value })}
+                onChange={(iso) => setForm({ ...form, date: iso })}
               />
             </Field>
             <Field label="سررسید (اختیاری)">
-              <Input
-                type="date"
-                dir="ltr"
+              <DateInput
                 value={form.due_date}
-                onChange={(event) => setForm({ ...form, due_date: event.target.value })}
+                allowClear
+                onChange={(iso) => setForm({ ...form, due_date: iso })}
               />
             </Field>
           </div>
@@ -357,14 +355,10 @@ export function Debts() {
               />
             </Field>
             <Field label="تاریخ">
-              <Input
-                type="date"
-                dir="ltr"
+              <DateInput
                 required
                 value={payForm.date}
-                onChange={(event) =>
-                  setPayForm({ ...payForm, date: event.target.value })
-                }
+                onChange={(iso) => setPayForm({ ...payForm, date: iso })}
               />
             </Field>
           </div>

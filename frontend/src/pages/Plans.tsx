@@ -2,6 +2,7 @@ import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import { api } from "../api";
+import { DateInput } from "../components/DateInput";
 import {
   Badge,
   Button,
@@ -313,24 +314,17 @@ export function Plans() {
 
           <div className="row">
             <Field label="تاریخ شروع">
-              <Input
-                type="date"
-                dir="ltr"
+              <DateInput
                 required
                 value={form.start_date}
-                onChange={(event) =>
-                  setForm({ ...form, start_date: event.target.value })
-                }
+                onChange={(iso) => setForm({ ...form, start_date: iso })}
               />
             </Field>
             <Field label="اولین سررسید" hint="خالی = یک ماه بعد از شروع">
-              <Input
-                type="date"
-                dir="ltr"
+              <DateInput
                 value={form.first_due_date}
-                onChange={(event) =>
-                  setForm({ ...form, first_due_date: event.target.value })
-                }
+                placeholder="خودکار"
+                onChange={(iso) => setForm({ ...form, first_due_date: iso })}
               />
             </Field>
             <Field label="فاصله (ماه)">

@@ -1,3 +1,5 @@
+import { formatJalali, todayISO as isoToday } from "./jalali";
+
 export const CURRENCY_LABEL: Record<string, string> = {
   IRT: "تومان",
   IRR: "ریال",
@@ -18,18 +20,11 @@ export function formatMoney(
 }
 
 export function formatDate(value: string | null | undefined): string {
-  if (!value) return "—";
-  const date = new Date(value);
-  if (Number.isNaN(date.getTime())) return value;
-  return new Intl.DateTimeFormat("fa-IR", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-  }).format(date);
+  return formatJalali(value);
 }
 
 export function todayISO(): string {
-  return new Date().toISOString().slice(0, 10);
+  return isoToday();
 }
 
 export const ACCOUNT_TYPES: Record<string, string> = {
